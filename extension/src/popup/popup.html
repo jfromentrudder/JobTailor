@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+  <body>
+    <div id="app">
+      <div id="header">
+        <svg
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="#2563eb"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z" />
+          <polyline points="14 2 14 8 20 8" />
+        </svg>
+        <h1>JobTailor</h1>
+      </div>
+
+      <div id="content">
+        <div id="loading" class="state">
+          <div class="spinner"></div>
+          <p>Checking page...</p>
+        </div>
+
+        <div id="not-logged-in" class="state hidden">
+          <div class="icon-circle orange">
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4" />
+              <polyline points="10 17 15 12 10 7" />
+              <line x1="15" y1="12" x2="3" y2="12" />
+            </svg>
+          </div>
+          <p>Sign in to start tailoring your resume</p>
+          <button id="login-btn" class="btn primary">Log In</button>
+        </div>
+
+        <div id="no-job" class="state hidden">
+          <div class="icon-circle gray">
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <circle cx="11" cy="11" r="8" />
+              <line x1="21" y1="21" x2="16.65" y2="16.65" />
+            </svg>
+          </div>
+          <p>No job description detected on this page.</p>
+          <p class="hint">Navigate to a job listing to get started.</p>
+        </div>
+
+        <div id="job-detected" class="state hidden">
+          <div class="icon-circle green">
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <polyline points="20 6 9 17 4 12" />
+            </svg>
+          </div>
+          <h2 id="job-title">Job Detected</h2>
+          <p id="company-name" class="company"></p>
+          <button id="tailor-btn" class="btn primary">
+            Tailor My Resume
+          </button>
+        </div>
+
+        <div id="tailoring" class="state hidden">
+          <div class="spinner"></div>
+          <p>Tailoring your resume...</p>
+          <p class="hint">This may take 10-20 seconds.</p>
+        </div>
+
+        <div id="success" class="state hidden">
+          <div class="icon-circle green">
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <polyline points="20 6 9 17 4 12" />
+            </svg>
+          </div>
+          <p>Resume tailored successfully!</p>
+          <a id="view-link" href="#" target="_blank" class="btn primary">
+            View on Dashboard
+          </a>
+        </div>
+
+        <div id="error" class="state hidden">
+          <div class="icon-circle red">
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <circle cx="12" cy="12" r="10" />
+              <line x1="15" y1="9" x2="9" y2="15" />
+              <line x1="9" y1="9" x2="15" y2="15" />
+            </svg>
+          </div>
+          <p id="error-message">Something went wrong.</p>
+          <button id="retry-btn" class="btn secondary">Retry</button>
+        </div>
+      </div>
+    </div>
+    <script src="popup.js"></script>
+  </body>
+</html>

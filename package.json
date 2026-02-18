@@ -1,0 +1,14 @@
+{
+  "name": "jobtailor",
+  "private": true,
+  "workspaces": [
+    "web",
+    "extension"
+  ],
+  "scripts": {
+    "dev:web": "npm run dev --workspace=web",
+    "dev:ext": "npm run dev --workspace=extension",
+    "build:web": "npm run build --workspace=web",
+    "build:ext": "npm run build --workspace=extension"
+  }
+}
