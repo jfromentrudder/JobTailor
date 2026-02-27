@@ -86,6 +86,36 @@
           </button>
         </div>
 
+        <div id="application-detected" class="state hidden">
+          <div class="icon-circle blue">
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" />
+              <rect x="8" y="2" width="8" height="4" rx="1" ry="1" />
+            </svg>
+          </div>
+          <h2>Application Detected</h2>
+          <p id="field-count" class="hint"></p>
+
+          <div id="resume-selector" class="resume-selector hidden">
+            <label class="select-label">Resume version:</label>
+            <select id="resume-select">
+              <option value="">Loading resumes...</option>
+            </select>
+          </div>
+
+          <button id="autofill-btn" class="btn primary">
+            Autofill Application
+          </button>
+          <p id="autofill-result" class="hint hidden"></p>
+        </div>
+
         <div id="tailoring" class="state hidden">
           <div class="spinner"></div>
           <p>Tailoring your resume...</p>
@@ -109,6 +139,24 @@
           <a id="view-link" href="#" target="_blank" class="btn primary">
             View on Dashboard
           </a>
+        </div>
+
+        <div id="autofill-success" class="state hidden">
+          <div class="icon-circle green">
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <polyline points="20 6 9 17 4 12" />
+            </svg>
+          </div>
+          <p id="autofill-summary">Application filled!</p>
+          <p class="hint">Review the form before submitting.</p>
+          <button id="autofill-retry-btn" class="btn secondary">Fill Again</button>
         </div>
 
         <div id="error" class="state hidden">

@@ -70,17 +70,17 @@ export function UploadForm() {
       onDrop={handleDrop}
       className={`border-2 border-dashed rounded-xl p-12 text-center transition-colors ${
         dragOver
-          ? "border-blue-400 bg-blue-50"
+          ? "border-blue-400 bg-blue-50 dark:bg-blue-900/30"
           : success
-            ? "border-green-300 bg-green-50"
-            : "border-gray-300 hover:border-gray-400"
+            ? "border-green-300 bg-green-50 dark:border-green-700 dark:bg-green-900/20"
+            : "border-gray-300 dark:border-gray-600 hover:border-gray-400 dark:hover:border-gray-500"
       }`}
     >
       {success ? (
         <div className="space-y-2">
           <Check className="h-12 w-12 text-green-600 mx-auto" />
-          <p className="text-green-700 font-medium">Resume uploaded successfully!</p>
-          <p className="text-sm text-green-600">
+          <p className="text-green-700 dark:text-green-300 font-medium">Resume uploaded successfully!</p>
+          <p className="text-sm text-green-600 dark:text-green-400">
             Your base resume is ready. The extension will use it for tailoring.
           </p>
         </div>
@@ -89,15 +89,15 @@ export function UploadForm() {
           {uploading ? (
             <div className="space-y-2">
               <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto" />
-              <p className="text-gray-600">Uploading and processing...</p>
+              <p className="text-gray-600 dark:text-gray-400">Uploading and processing...</p>
             </div>
           ) : (
             <>
-              <Upload className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-              <p className="text-gray-700 font-medium mb-1">
+              <Upload className="h-12 w-12 text-gray-400 dark:text-gray-500 mx-auto mb-4" />
+              <p className="text-gray-700 dark:text-gray-300 font-medium mb-1">
                 Drop your resume PDF here
               </p>
-              <p className="text-sm text-gray-500 mb-4">or click to browse</p>
+              <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">or click to browse</p>
               <label className="inline-block px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors cursor-pointer">
                 Choose File
                 <input
@@ -107,14 +107,14 @@ export function UploadForm() {
                   className="hidden"
                 />
               </label>
-              <p className="text-xs text-gray-400 mt-3">PDF only, max 10MB</p>
+              <p className="text-xs text-gray-400 dark:text-gray-500 mt-3">PDF only, max 10MB</p>
             </>
           )}
         </>
       )}
 
       {error && (
-        <div className="mt-4 flex items-center gap-2 justify-center text-red-600 text-sm">
+        <div className="mt-4 flex items-center gap-2 justify-center text-red-600 dark:text-red-400 text-sm">
           <AlertCircle className="h-4 w-4" />
           {error}
         </div>

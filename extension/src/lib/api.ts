@@ -52,3 +52,63 @@ export async function tailorResume(data: {
     return { error: message };
   }
 }
+
+export interface ProfileData {
+  full_name?: string;
+  email?: string;
+  phone?: string;
+  linkedin_url?: string;
+  github_url?: string;
+  portfolio_url?: string;
+  location?: string;
+  desired_salary?: string;
+  work_authorization?: string;
+  willing_to_relocate?: boolean;
+  visa_sponsorship_needed?: boolean;
+  years_of_experience?: number | null;
+  education_level?: string;
+  current_title?: string;
+}
+
+export async function fetchProfile(): Promise<ProfileData | null> {
+  const token = await getAccessToken();
+  if (!token) return null;
+
+  const apiUrl = await getApiUrl();
+
+  try {
+    const response = await fetch(`${apiUrl}/api/profile`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    if (!response.ok) return null;
+    return await response.json();
+  } catch {
+    return null;
+  }
+}
+
+export interface TailoredResumeInfo {
+  id: string;
+  job_title: string;
+  company_name: string | null;
+  status: string;
+  created_at: string;
+  tailored_resume_url: string | null;
+}
+
+export async function fetchTailoredResumes(): Promise<TailoredResumeInfo[]> {
+  const token = await getAccessToken();
+  if (!token) return [];
+
+  const apiUrl = await getApiUrl();
+
+  try {
+    const response = await fetch(`${apiUrl}/api/tailored`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    if (!response.ok) return [];
+    return await response.json();
+  } catch {
+    return [];
+  }
+}

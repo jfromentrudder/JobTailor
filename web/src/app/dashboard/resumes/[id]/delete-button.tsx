@@ -33,7 +33,7 @@ export function DeleteButton({ id }: { id: string }) {
         </button>
         <button
           onClick={() => setConfirming(false)}
-          className="px-3 py-2 border border-gray-300 rounded-lg text-sm hover:bg-gray-50"
+          className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800"
         >
           Cancel
         </button>
@@ -44,7 +44,7 @@ export function DeleteButton({ id }: { id: string }) {
   return (
     <button
       onClick={() => setConfirming(true)}
-      className="inline-flex items-center gap-2 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 text-sm"
+      className="inline-flex items-center gap-2 px-4 py-2 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 text-sm"
     >
       <Trash2 className="h-4 w-4" />
       Delete

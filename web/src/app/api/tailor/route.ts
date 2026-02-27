@@ -91,6 +91,7 @@ export const POST = withAuth(async (request, user, supabase) => {
       provider: aiProvider,
       model: aiModel,
       encryptedApiKey: settings?.custom_api_key_encrypted,
+      subscriptionTier: settings?.subscription_tier || "free",
     });
 
     const { _tokensUsed, ...contentWithoutTokens } = tailoredContent;

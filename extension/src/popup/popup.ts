@@ -1,4 +1,6 @@
 import browser from "webextension-polyfill";
+import { fetchProfile, fetchTailoredResumes } from "../lib/api";
+import type { ProfileData, TailoredResumeInfo } from "../lib/api";
 
 const APP_URL = "http://localhost:3000";
 
@@ -7,8 +9,10 @@ const states = [
   "not-logged-in",
   "no-job",
   "job-detected",
+  "application-detected",
   "tailoring",
   "success",
+  "autofill-success",
   "error",
 ];
 
@@ -26,6 +30,9 @@ let currentPageData: {
   url?: string;
   pageText?: string;
 } = {};
+
+let cachedProfile: ProfileData | null = null;
+let cachedResumes: TailoredResumeInfo[] = [];
 
 async function init() {
   // Check auth
@@ -56,8 +63,7 @@ async function init() {
     const titleEl = document.getElementById("job-title");
     const companyEl = document.getElementById("company-name");
     if (titleEl) titleEl.textContent = detection.jobTitle || "Job Detected";
-    if (companyEl)
-      companyEl.textContent = detection.companyName || "";
+    if (companyEl) companyEl.textContent = detection.companyName || "";
 
     currentPageData = {
       jobTitle: detection.jobTitle,
@@ -66,8 +72,51 @@ async function init() {
     };
 
     showState("job-detected");
+  } else if (detection?.isApplicationForm) {
+    const fieldCount = detection.fieldCount || 0;
+    const fieldCountEl = document.getElementById("field-count");
+    if (fieldCountEl) {
+      fieldCountEl.textContent = `${fieldCount} fillable field${fieldCount !== 1 ? "s" : ""} detected`;
+    }
+
+    showState("application-detected");
+
+    // Load profile and resumes in parallel
+    loadApplicationData();
   } else {
     showState("no-job");
+  }
+}
+
+async function loadApplicationData() {
+  try {
+    const [profile, resumes] = await Promise.all([
+      fetchProfile(),
+      fetchTailoredResumes(),
+    ]);
+
+    cachedProfile = profile;
+    cachedResumes = resumes;
+
+    // Populate resume selector
+    const resumeSelect = document.getElementById("resume-select") as HTMLSelectElement;
+    const resumeSelector = document.getElementById("resume-selector");
+
+    if (resumeSelect && resumes.length > 0 && resumeSelector) {
+      resumeSelector.classList.remove("hidden");
+      resumeSelect.innerHTML = "";
+
+      for (const resume of resumes) {
+        const option = document.createElement("option");
+        option.value = resume.id;
+        const date = new Date(resume.created_at).toLocaleDateString();
+        const company = resume.company_name ? ` — ${resume.company_name}` : "";
+        option.textContent = `${resume.job_title}${company} (${date})`;
+        resumeSelect.appendChild(option);
+      }
+    }
+  } catch {
+    // Non-critical, autofill can still work without resumes
   }
 }
 
@@ -131,6 +180,45 @@ document.getElementById("tailor-btn")?.addEventListener("click", async () => {
   }
 });
 
+// Autofill button
+document.getElementById("autofill-btn")?.addEventListener("click", async () => {
+  if (!cachedProfile) {
+    showError("No profile data. Fill in your profile at the JobTailor dashboard first.");
+    return;
+  }
+
+  const tabs = await browser.tabs.query({
+    active: true,
+    currentWindow: true,
+  });
+  const tab = tabs[0];
+  if (!tab?.id) {
+    showError("No active tab found");
+    return;
+  }
+
+  try {
+    const result = await browser.tabs.sendMessage(tab.id, {
+      type: "FILL_FORM",
+      profile: cachedProfile,
+    });
+
+    if (result) {
+      const summaryEl = document.getElementById("autofill-summary");
+      if (summaryEl) {
+        summaryEl.textContent = `Filled ${result.filled} of ${result.filled + result.skipped} fields`;
+      }
+      showState("autofill-success");
+    } else {
+      showError("Could not autofill the form");
+    }
+  } catch (err: unknown) {
+    const message =
+      err instanceof Error ? err.message : "Autofill failed";
+    showError(message);
+  }
+});
+
 // Login button
 document.getElementById("login-btn")?.addEventListener("click", () => {
   browser.tabs.create({ url: `${APP_URL}/extension/connect` });
@@ -139,6 +227,11 @@ document.getElementById("login-btn")?.addEventListener("click", () => {
 // Retry button
 document.getElementById("retry-btn")?.addEventListener("click", () => {
   init();
+});
+
+// Autofill retry button
+document.getElementById("autofill-retry-btn")?.addEventListener("click", () => {
+  showState("application-detected");
 });
 
 function showError(message: string) {

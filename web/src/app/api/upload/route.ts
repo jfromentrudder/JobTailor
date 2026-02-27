@@ -22,7 +22,8 @@ export const POST = withAuth(async (request, user, supabase) => {
   let extractedText = "";
   try {
     extractedText = await extractTextFromPdf(buffer);
-  } catch {
+  } catch (err) {
+    console.error("PDF parse error:", err);
     return NextResponse.json(
       { error: "Could not parse PDF. Please try a different file." },
       { status: 400 }

@@ -5,6 +5,20 @@ export interface UserSettings {
   ai_provider: "openai" | "anthropic";
   ai_model: string;
   custom_api_key_encrypted: string | null;
+  subscription_tier: "free" | "pro" | "plus";
+  // Profile fields for job application autofill
+  phone: string | null;
+  linkedin_url: string | null;
+  location: string | null;
+  work_authorization: string | null;
+  years_of_experience: number | null;
+  education_level: string | null;
+  current_title: string | null;
+  portfolio_url: string | null;
+  github_url: string | null;
+  desired_salary: string | null;
+  willing_to_relocate: boolean;
+  visa_sponsorship_needed: boolean;
   created_at: string;
   updated_at: string;
 }
@@ -72,8 +86,31 @@ export interface UsageInfo {
   tailor_count: number;
   limit: number;
   has_custom_key: boolean;
+  subscription_tier: "free" | "pro" | "plus";
   month_year: string;
   allowed: boolean;
+}
+
+export interface SubscriptionPlan {
+  id: string;
+  name: string;
+  monthly_limit: number;
+  allowed_providers: string[];
+  allowed_models: string[];
+  price_monthly_cents: number;
+}
+
+export interface BillingRecord {
+  id: string;
+  user_id: string;
+  plan_id: string;
+  amount_cents: number;
+  status: "pending" | "completed" | "failed" | "refunded";
+  payment_provider: string | null;
+  payment_provider_id: string | null;
+  period_start: string;
+  period_end: string;
+  created_at: string;
 }
 
 export interface TailorRequest {
