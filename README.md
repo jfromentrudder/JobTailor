@@ -143,4 +143,4 @@ npm run build:ext
 
 ## License
 
-PROPRIETARY SOFTWARE LICENSE
+MIT License
